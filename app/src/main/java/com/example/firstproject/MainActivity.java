@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     double firstNumber;
     double secondNumber;
     double calculation;
+    boolean isCalculationDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +31,28 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        result = findViewById(R.id.textView);
+        result = findViewById(R.id.textViewResult);
         result.setText("");
+        isCalculationDone = false;
     }
 
     public void showNumber(View view) {
-        Button button = (Button) view;
-        if (result.getText() != "")
-        {
+        if (isCalculationDone) {
             result.setText("");
-            result.append(button.getText().toString());
-        }
-        else
-        {
-            result.append(button.getText().toString());
+            isCalculationDone = false;
         }
 
+        Button button = (Button) view;
+        result.append(button.getText().toString());
     }
 
     public void Operation(View view) {
-
         ch = ((Button) view).getText().toString().charAt(0);
         firstNumber = Double.parseDouble((result.getText().toString()));
         result.setText("");
     }
 
-    public void equalOperation(View view) { // calculate the result
-
+    public void equalOperation(View view) {
         secondNumber = Double.parseDouble(result.getText().toString());
         calculation = 0;
 
@@ -84,11 +80,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             }
-         }
-        result.setText(String.valueOf((int)calculation));
+        }
+
+        if (calculation == Math.floor(calculation)) {
+            result.setText(String.valueOf((int)calculation));
+        }
+        else {
+            result.setText(String.format("%.2f", calculation));
+        }
+
+        isCalculationDone = true;
         calculation = 0;
         firstNumber = 0;
         secondNumber = 0;
-        }
-
     }
+}
